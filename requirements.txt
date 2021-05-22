@@ -4,7 +4,6 @@ psycopg2
 plotly
 requests
 nsepython
-time
 pandas_ta
 pandas-datareader
 jugaad_data
