@@ -5,6 +5,7 @@ from datetime import datetime,timedelta,date
 from jugaad_data.nse import NSELive
 n = NSELive()
 import pandas_ta as ta
+import requests
 
 
 headers = {
