@@ -1,8 +1,5 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
-import requests
-from nsepython import *
 import pandas_datareader.data as web
 from datetime import datetime,timedelta,date
 from jugaad_data.nse import NSELive
