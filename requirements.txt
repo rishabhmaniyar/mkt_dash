@@ -1,9 +1,6 @@
 streamlit
 pandas
-psycopg2
-plotly
 requests
-nsepython
 pandas_ta
 pandas-datareader
 jugaad_data
