@@ -85,7 +85,7 @@ if option=='Backtest':
     start = st.date_input ( label='start date' , value=end-timedelta(250) , min_value=None , max_value=None , key=None )
     end = st.date_input ( label='end date' , value=None , min_value=None , max_value=None , key=None )
     b=st.sidebar.number_input(label='Buffer %',min_value=1)
-    df = web.DataReader('{}.NS'.format(stock),'yahoo',start=start,end=end)
+    df = web.DataReader('{}'.format(stock),'yahoo',start=start,end=end)
     df=df.reset_index()
     df=df.set_index('Date')    
     #st.write(df)
