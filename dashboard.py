@@ -27,21 +27,8 @@ left_column, right_column = st.beta_columns(2)
 pressed = left_column.button('Press me?')
 if pressed:
     right_column.write("Woohoo!")
-load=nse_optionchain_scrapper("NIFTY")
-spot=load['records']['underlyingValue']
-ce_oi=load['filtered']['CE']['totOI']
-pe_oi=load['filtered']['PE']['totOI']
-pcr=pe_oi/ce_oi
-st.sidebar.write(spot)
-st.sidebar.write(round(pcr,3))
-
-# expander = st.sidebar.beta_expander("Order")
-# expander.write("Regular Order")
 
 option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','News','Backtest','Trades','Market Movers'))
-# chart_data = pd.DataFrame(
-#      np.random.randn(20, 3),
-#      columns=['a', 'b', 'c'])
 if option=='Option Chain (Index)':
     index=st.sidebar.selectbox("Select Index ",('NIFTY','BANKNIFTY'))
     if index=='NIFTY':
