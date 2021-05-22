@@ -1,0 +1,12 @@
+streamlit
+pandas
+psycopg2
+plotly
+tweepy
+requests
+nsepython
+time
+pandas_ta
+pandas-datareader
+json  
+jugaad_data
