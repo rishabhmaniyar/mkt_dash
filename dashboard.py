@@ -197,7 +197,52 @@ if option=='Backtest':
         st.write(pnl_df)
         r=(sum(pnl)*100)/round(df['Close'][0])
         report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
-        
+   
+    if days=='MA Crossover':
+        df=df.reset_index()
+        position=0
+        buy=[]
+        sell=[]
+        pnl=[]  
+        fm=st.sidebar.number_input(label='Fast MA Period',min_value=2)  
+        df['fma']=df.ta.ema(length=fm, append=True)
+        sm=st.sidebar.number_input(label='Slow MA Period',min_value=5)        
+        df['sma']=df.ta.ema(length=sm, append=True)
+        df=df.dropna()
+        for i in range(0,len(df)-1,1):
+            fe_f=df.iloc[i]['fma']
+            se_f=df.iloc[i+1]['fma']  
+            fe_s=df.iloc[i]['sma']
+            se_s=df.iloc[i+1]['sma']
+            h=df.iloc[i+1]['high']
+            l=df.iloc[i+1]['low']
+            t_close=df.iloc[i]['close']
+            date=df.iloc[i]['date']
+            if (crossup(fe_f,se_f,fe_s,se_s)) and position==0:
+                position=1
+                buy.append([date,h])
+            if (crossdown(fe_f,se_f,fe_s,se_s)) and position==1:
+                position=0
+                sell.append([date,l])
+        if len(buy)>len(sell):
+            position=0
+            sell.append([date,t_close]) 
+        buy_df=pd.DataFrame(buy) 
+        sell_df=pd.DataFrame(sell)
+        buy_df.columns=['Date','Price'] 
+        sell_df.columns=['Date','Price'] 
+        st.title("Buy Trades")
+        st.write(buy_df)
+        st.title("Sell Trades")
+        st.write(sell_df)
+        pnl=[]
+        for i in range(0,len(buy),1):
+            pnl.append(sell[i][1]-buy[i][1])
+        pnl_df=pd.DataFrame(pnl)
+        pnl_df.columns=['PNL']
+        st.write(pnl_df)
+        r=(sum(pnl)*100)/round(df.iloc[0]['close'])
+        report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
 if option=='Market Movers':
     mkt_movers_link = "https://msi-gcloud-prod.appspot.com/gateway/simple-api/ms-india/instr/getMarketMovers.json?ms-auth=3990+MarketSmithINDUID-Web0000000000+MarketSmithINDUID-Web0000000000+0+210127215830+-457924016"
     movers = requests.get(mkt_movers_link,headers=headers).json()
