@@ -90,6 +90,12 @@ if option=='Backtest':
     df=df.set_index('Date')    
     #st.write(df)
     st.line_chart(df['Close'])
+    def crossup(fe_f,se_f,fe_s,se_s):
+        if fe_f<fe_s and se_f>se_s:
+            return (True)
+    def crossdown(fe_f,se_f,fe_s,se_s):
+        if fe_f>fe_s and se_f<se_s:
+            return (True)
     def report(stock,trades,total_profit,max_profit,max_loss,returns):
         st.title("Report")
         st.write(f'Stock Name ->  {stock}')
