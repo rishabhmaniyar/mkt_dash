@@ -40,7 +40,7 @@ if option=='Option Chain (Index)':
         df1=pd.DataFrame(oc)
         df1.columns=['CE OI','CE COI','CE LTP','SP','PE LTP','PE COI','PE OI']
         df1=df1.set_index('SP')
-        st.write(df1)
+        #st.write(df1)
         st.bar_chart(df1)
     if index=='BANKNIFTY':  
         option_chain = n.index_option_chain("BANKNIFTY")
@@ -50,7 +50,7 @@ if option=='Option Chain (Index)':
         df2=pd.DataFrame(oc)
         df2.columns=['CE OI','CE COI','CE LTP','SP','PE LTP','PE COI','PE OI']
         df2=df2.set_index('SP')
-        st.write(df2)
+        #st.write(df2)
         st.bar_chart(df2)
 def nsefetch(payload):
     try:
