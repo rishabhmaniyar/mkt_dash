@@ -150,7 +150,7 @@ if option=='Backtest':
         for i in range(1,len(df)-1,1):
             th=df['High'][i]
             tph=df['High'][i-1]
-            t_close=round(df['Adj Close'][i+1])
+            t_close=round(df['Close'][i+1])
             tnh=df['High'][i+1]
             tl=df['Low'][i]
             tpl=df['Low'][i-1]
