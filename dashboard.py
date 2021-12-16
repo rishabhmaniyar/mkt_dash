@@ -6,7 +6,7 @@ from jugaad_data.nse import NSELive
 n = NSELive()
 import pandas_ta as ta
 import requests
-
+from py5paisa import FivePaisaClient
 
 headers = {
         'Connection': 'keep-alive',
@@ -20,7 +20,21 @@ headers = {
         'Sec-Fetch-Mode': 'navigate',
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+        "x-requested-with": "XMLHttpRequest"
     }
+
+cred={
+    "APP_NAME":"5P54504289",
+    "APP_SOURCE":"7050",
+    "USER_ID":"byNY6tfyKQY",
+    "PASSWORD":"3QxsV4SHMWV",
+    "USER_KEY":"TbcrPHDEDeOCkgi4Aim3huicnCvSOcAx",
+    "ENCRYPTION_KEY":"xwuGHmI3oRROIzKY5rmGwkwzS6b22ffH"
+    }
+
+client = FivePaisaClient(email="akshitgupta002@gmail.com", passwd="5paisa@111", dob="19980607",cred=cred)
+client.login()
+
 st.write("Hey Rishabh")
 st.sidebar.title("Dashboard")
 
@@ -29,7 +43,7 @@ pressed = left_column.button('Press me?')
 if pressed:
     right_column.write("Woohoo!")
 
-option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','News','Backtest','Trades','Market Movers'))
+option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','Stock Info','Backtest','Trades','Market Movers'))
 if option=='Option Chain (Index)':
     index=st.sidebar.selectbox("Select Index ",('NIFTY','BANKNIFTY'))
     if index=='NIFTY':
@@ -78,6 +92,28 @@ if option=='Option Chain (Stock)':
 #        np.random.randn(20, 3),
 #        columns=['a', 'b', 'c'])
 end=date.today()
+if option=='Stock Info':
+    stock=st.sidebar.text_input(label='Search for Stock',value='LT')
+    sid=st.sidebar.text_input(label='Enter for Stock SID',value='837957')
+    # url=f'https://www.nseindia.com/api/option-chain-equities?symbol={stock}'
+    mm_search_url=f'https://www.marketsmojo.com/portfolio-plus/frontendsearch?SearchPhrase={stock}'
+    mm_about_url=f'https://frapi.marketsmojo.com/Stocks_Companycv/about_comp_full_det?sid={sid}&exchange=0&mob=1'
+    mm_recomm_url=f'https://frapi.marketsmojo.com/Stocks_Recos/get_recos?sid={sid}&exchange=0'
+    mm_stk_news_url='https://frapi.marketsmojo.com/stocks_news/listNews'
+    search=nsefetch(mm_search_url)
+    ss=pd.DataFrame(search)
+    ss=ss.drop(['ScriptCode','url','price','Company','ExchangeName'],axis=1)
+    st.sidebar.write(ss)
+    st.write('About the Company')
+    ab=nsefetch(mm_about_url)['data']['KNOW_YOUR_COMPANY']
+    st.write(ab['full_details'])
+    st.write('Recommendations for the Stock')
+    rec=nsefetch(mm_recomm_url)['data']
+    d2=pd.DataFrame(rec)
+    if not d2.empty:
+        d2=d2.drop(['graph_data','pdf_link','low_reco_dir','reco_potential_dir','peak_reco_dir','bse200_dir','reco_performance_dir'],axis=1)
+    st.write(d2)
+    
 if option=='Backtest':
     days=st.sidebar.selectbox("Strategy?",('HH-LL','RSI','MA Crossover'))
     stock=st.text_input(label='stock name',value='LT')
@@ -85,9 +121,10 @@ if option=='Backtest':
     start = st.date_input ( label='start date' , value=end-timedelta(250) , min_value=None , max_value=None , key=None )
     end = st.date_input ( label='end date' , value=None , min_value=None , max_value=None , key=None )
     b=st.sidebar.number_input(label='Buffer %',min_value=1)
-    df = web.DataReader('{}.NS'.format(stock),'yahoo',start=start,end=end)
-    df=df.reset_index()
-    df=df.set_index('Date')    
+    df=client.historical_data('N','C',client.fetch_market_feed([{"Exch":"N","ExchType":"C","Symbol":stock}])['Data'][0]['Token'],'1d',start,end)
+    # df=df.reset_index()
+    df.rename(columns={'Datetime':'Date'},inplace=True)
+    df=df.set_index('Date')   
     #st.write(df)
     st.line_chart(df['Close'])
     def crossup(fe_f,se_f,fe_s,se_s):
