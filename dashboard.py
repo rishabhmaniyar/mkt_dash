@@ -7,6 +7,7 @@ n = NSELive()
 import pandas_ta as ta
 import requests
 from py5paisa import FivePaisaClient
+import websocket
 
 headers = {
         'Connection': 'keep-alive',
@@ -75,23 +76,37 @@ def nsefetch(payload):
         output = s.get(payload,headers=headers).json()
     return output
 if option=='Option Chain (Stock)':
-    stock=st.sidebar.text_input(label='Search for Stock',value='LT')
-    url=f'https://www.nseindia.com/api/option-chain-equities?symbol={stock}'
-    option_chain=nsefetch(url)
-    oc=[]
-    for option in option_chain['filtered']['data']:
-        (oc.append([option['CE']['openInterest'],option['CE']['changeinOpenInterest'],option['CE']['lastPrice'], option['strikePrice'], option['PE']['lastPrice'],option['PE']['changeinOpenInterest'],option['PE']['openInterest']]))
-    df2=pd.DataFrame(oc)
-    df2.columns=['CE OI','CE COI','CE LTP','SP','PE LTP','PE COI','PE OI']
-    df2=df2.set_index('SP')
-    #st.write(df2)
-    st.bar_chart(df2)
-# st.line_chart(chart_data)
-# if st.checkbox('Show dataframe'):
-#     chart_data = pd.DataFrame(
-#        np.random.randn(20, 3),
-#        columns=['a', 'b', 'c'])
+    stock=st.sidebar.text_input(label='Search for Stock',value='NIFTY')
+    exp_url='https://opstra.definedge.com/api/weeklies'
+    exp=st.sidebar.radio('Select Expiry?',tuple(nsefetch(exp_url)))
+    # url=f'https://www.nseindia.com/api/option-chain-equities?symbol={stock}'
+    trendlyne_search_url=f'https://trendlyne.com/futures-options/search/30-dec-2021-near/optionchain/?term={stock}'
+    # trendlyne_oc_url=f'https://trendlyne.com/futures-options/api/options/30-dec-2021-near/{sid}'
+    opstra_oc=f'https://opstra.definedge.com/api/openinterest/optionchain/free/{stock}&{exp}'
+    
+    search=nsefetch(opstra_oc)
+    df=pd.DataFrame(search['data'])
+    df=df.set_index('StrikePrice')
+    st.bar_chart(df)
+#     url=f'https://www.nseindia.com/api/option-chain-equities?symbol={stock}'
+    
 end=date.today()
+
+if option=='Results':
+    res_url='https://opstra.definedge.com/api/resultscalendar?responseType=JSON'
+    results=nsefetch(res_url)
+    rls=[]
+    for r in results:
+        d=r['date']
+        dt=datetime.strptime(d, '%Y-%m-%d')
+        if dt>datetime.today():
+            rls.append(r)
+    
+    df=pd.DataFrame(rls)
+    st.write("Upcoming Results")
+    st.write(df)
+        
+        
 if option=='Stock Info':
     stock=st.sidebar.text_input(label='Search for Stock',value='LT')
     sid=st.sidebar.text_input(label='Enter for Stock SID',value='837957')
