@@ -44,7 +44,7 @@ pressed = left_column.button('Press me?')
 if pressed:
     right_column.write("Woohoo!")
 
-option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','Stock Info','Backtest','Trades','Market Movers'))
+option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','Stock Info','Backtest','Results','Trades','Market Movers'))
 if option=='Option Chain (Index)':
     index=st.sidebar.selectbox("Select Index ",('NIFTY','BANKNIFTY'))
     if index=='NIFTY':
