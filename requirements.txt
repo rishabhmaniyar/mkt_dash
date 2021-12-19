@@ -5,3 +5,4 @@ pandas_ta
 pandas-datareader
 jugaad_data
 py5paisa
+websocket-client
