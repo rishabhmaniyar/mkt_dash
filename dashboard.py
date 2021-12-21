@@ -33,7 +33,7 @@ cred={
     "ENCRYPTION_KEY":"xwuGHmI3oRROIzKY5rmGwkwzS6b22ffH"
     }
 
-client = FivePaisaClient(email="akshitgupta002@gmail.com", passwd="5paisa@111", dob="19980607",cred=cred)
+client = FivePaisaClient(email="akshitgupta002@gmail.com", passwd="5paisa@1111", dob="19980607",cred=cred)
 client.login()
 
 st.write("Hey Rishabh")
@@ -57,7 +57,7 @@ if option=='Option Chain (Index)':
         df1=df1.set_index('SP')
         #st.write(df1)
         st.bar_chart(df1)
-    if index=='BANKNIFTY':  
+    if index=='BANKNIFTY':
         option_chain = n.index_option_chain("BANKNIFTY")
         oc=[]
         for option in option_chain['filtered']['data']:
