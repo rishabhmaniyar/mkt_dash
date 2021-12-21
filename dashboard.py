@@ -273,10 +273,10 @@ if option=='Backtest':
             se_f=df.iloc[i+1]['fma']  
             fe_s=df.iloc[i]['sma']
             se_s=df.iloc[i+1]['sma']
-            h=df.iloc[i+1]['high']
-            l=df.iloc[i+1]['low']
-            t_close=df.iloc[i]['close']
-            date=df.iloc[i]['date']
+            h=df.iloc[i+1]['High']
+            l=df.iloc[i+1]['Low']
+            t_close=df.iloc[i]['Close']
+            date=df.iloc[i]['Date']
             if (crossup(fe_f,se_f,fe_s,se_s)) and position==0:
                 position=1
                 buy.append([date,h])
