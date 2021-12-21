@@ -75,6 +75,8 @@ def nsefetch(payload):
         output = s.get("http://nseindia.com",headers=headers)
         output = s.get(payload,headers=headers).json()
     return output
+
+
 if option=='Option Chain (Stock)':
     stock=st.sidebar.text_input(label='Search for Stock',value='NIFTY')
     exp_url='https://opstra.definedge.com/api/weeklies'
@@ -300,8 +302,10 @@ if option=='Backtest':
         pnl_df=pd.DataFrame(pnl)
         pnl_df.columns=['PNL']
         st.write(pnl_df)
-        r=(sum(pnl)*100)/round(df.iloc[0]['close'])
+        r=(sum(pnl)*100)/round(df.iloc[0]['Close'])
         report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
+        
+
 if option=='Market Movers':
     mkt_movers_link = "https://msi-gcloud-prod.appspot.com/gateway/simple-api/ms-india/instr/getMarketMovers.json?ms-auth=3990+MarketSmithINDUID-Web0000000000+MarketSmithINDUID-Web0000000000+0+210127215830+-457924016"
     movers = requests.get(mkt_movers_link,headers=headers).json()
