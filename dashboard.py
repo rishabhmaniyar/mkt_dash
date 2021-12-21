@@ -33,7 +33,7 @@ cred={
     "ENCRYPTION_KEY":"xwuGHmI3oRROIzKY5rmGwkwzS6b22ffH"
     }
 
-client = FivePaisaClient(email="akshitgupta002@gmail.com", passwd="5paisa@1111", dob="19980607",cred=cred)
+client = FivePaisaClient(email="rishabh.maniyar@gmail.com", passwd="5paisa@123", dob="19990831",cred=cred)
 client.login()
 
 st.write("Hey Rishabh")
