@@ -138,6 +138,7 @@ if option=='Backtest':
     b=st.sidebar.number_input(label='Buffer %',min_value=1)
     df=client.historical_data('N','C',client.fetch_market_feed([{"Exch":"N","ExchType":"C","Symbol":stock}])['Data'][0]['Token'],'1d',start,end)
     # df=df.reset_index()
+    print(type(df))
     df=df.rename(columns={'Datetime':'Date'},axis='columns')
     df=df.set_index('Date')   
     #st.write(df)
