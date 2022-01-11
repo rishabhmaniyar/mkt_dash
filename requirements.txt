@@ -6,3 +6,4 @@ pandas-datareader
 jugaad_data
 py5paisa
 websocket-client
+selenium==3.141.0
