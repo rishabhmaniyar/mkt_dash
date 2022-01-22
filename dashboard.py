@@ -8,7 +8,7 @@ import pandas_ta as ta
 import requests
 from py5paisa import FivePaisaClient
 import websocket
-
+from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
@@ -57,7 +57,7 @@ pressed = left_column.button('Press me?')
 if pressed:
     right_column.write("Woohoo!")
 
-option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','Stock Info','Backtest','Results','Trades','Market Movers','E'))
+option=st.sidebar.selectbox("Looking for ?",('Option Chain (Index)','Option Chain (Stock)','Options Screener','Stock Info','Backtest','Results','Trades','Market Movers','E'))
 if option=='E':
         def run_selenium():
             name = str()
@@ -140,7 +140,26 @@ if option=='Option Chain (Stock)':
     df=df.set_index('StrikePrice')
     st.bar_chart(df)
 #     url=f'https://www.nseindia.com/api/option-chain-equities?symbol={stock}'
-    
+
+if option=='Options Screener':
+    screener=st.sidebar.selectbox("Select Screener",('O=L/O=H','New'))
+    if screener=='O=L/O=H':
+        ls=[]
+        url='https://www.pivottrading.co.in/beta/tools/open-high-low-index-options-scanner.php'
+        r = requests.get(url)
+        soup = bs(r.content, 'lxml')
+        table = soup.find(lambda tag:tag.name=='table')
+        inp=table.findAll('input')
+        for i in range(0,len(inp)-1):
+            try:
+                data=inp[i]['value']
+                ls.append(data.split('#'))
+            except:
+                continue
+        df=pd.DataFrame(ls)
+        df.columns=(['Symbol','Open','High','Low','ScripCode','Lot Size','Action'])
+        st.write(df)
+        
 end=date.today()
 
 if option=='Results':
