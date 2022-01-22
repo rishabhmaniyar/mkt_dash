@@ -7,3 +7,5 @@ jugaad_data
 py5paisa
 websocket-client
 selenium==3.141.0
+bs4
+BeautifulSoup4
