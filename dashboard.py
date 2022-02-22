@@ -38,15 +38,15 @@ headers = {
     }
 
 cred={
-    "APP_NAME":"5P54504289",
-    "APP_SOURCE":"7050",
-    "USER_ID":"byNY6tfyKQY",
-    "PASSWORD":"3QxsV4SHMWV",
-    "USER_KEY":"TbcrPHDEDeOCkgi4Aim3huicnCvSOcAx",
-    "ENCRYPTION_KEY":"xwuGHmI3oRROIzKY5rmGwkwzS6b22ffH"
+    "APP_NAME":"5P59721195",
+    "APP_SOURCE":8145,
+    "USER_ID":"I3LuppJO2oh",
+    "PASSWORD":"1Q7mUV8Evoh",
+    "USER_KEY":"qWCukQqgEsrJkiENDlRbqfc7TFHoR1ZP",
+    "ENCRYPTION_KEY":"LcO0rWc3NWwYfrCPp14XbtvwUBF4b5gY"
     }
 
-client = FivePaisaClient(email="rishabh.maniyar@gmail.com", passwd="pass@111", dob="19990831",cred=cred)
+client = FivePaisaClient(email="akshitgupta002@gmail.com", passwd="pass@1112", dob="19980607",cred=cred)
 client.login()
 
 st.write("Hey Rishabh")
