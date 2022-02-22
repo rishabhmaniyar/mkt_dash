@@ -203,7 +203,7 @@ if option=='Backtest':
     days=st.sidebar.selectbox("Strategy?",('HH-LL','RSI','MA Crossover'))
     stock=st.text_input(label='stock name',value='LT')
     #st.write(stock)
-    start = st.date_input ( label='start date' , value=end-timedelta(250) , min_value=None , max_value=None , key=None )
+    start = st.date_input ( label='start date' , value=end-timedelta(150) , min_value=None , max_value=None , key=None )
     end = st.date_input ( label='end date' , value=None , min_value=None , max_value=None , key=None )
     tf=st.sidebar.selectbox("Time Frame",('1m','5m','15m','30m','60m','1d'))
     b=st.sidebar.number_input(label='Buffer %',min_value=1)
