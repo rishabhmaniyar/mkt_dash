@@ -209,7 +209,6 @@ if option=='Backtest':
     b=st.sidebar.number_input(label='Buffer %',min_value=0)
     df=client.historical_data('N','C',client.fetch_market_feed([{"Exch":"N","ExchType":"C","Symbol":stock}])['Data'][0]['Token'],tf,start,end)
     # df=df.reset_index()
-    print(type(df))
     df.rename(columns={'Datetime':'Date'},inplace=True)
     df=df.set_index('Date')   
     #st.write(df)
@@ -331,6 +330,7 @@ if option=='Backtest':
         report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
         
     if days=='CCI':
+        df=df.reset_index()
         position=0
         buy=[]
         sell=[]
@@ -344,7 +344,7 @@ if option=='Backtest':
           se_f=df.iloc[i+1]['CCI']
           h=df.iloc[i+1]['High']
           l=df.iloc[i+1]['Low']
-          date=df.iloc[i+1]['Datetime']
+          date=df.iloc[i+1]['Date']
           if fe_f<=100 and se_f>100 and position==0:
             position=1
             buy.append([date,h])
