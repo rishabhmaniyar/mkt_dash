@@ -337,7 +337,7 @@ if option=='Backtest':
         sell=[]
         pnl=[]
         b=st.sidebar.number_input(label='CCI Period',min_value=5)
-        df['cci'] = df.ta.cci(df["Close"], length=b)
+        df['CCI'] = df.ta.cci(length=b)
         go_long=st.sidebar.number_input(label='CCI Buy Level',min_value=0)
         exit=st.sidebar.number_input(label='CCI Exit Level',min_value=0)        
         for i in range(1,len(df)-1,1):
