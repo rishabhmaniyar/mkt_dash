@@ -345,10 +345,10 @@ if option=='Backtest':
           h=df.iloc[i+1]['High']
           l=df.iloc[i+1]['Low']
           date=df.iloc[i+1]['Date']
-          if fe_f<=100 and se_f>100 and position==0:
+          if fe_f<=go_long and se_f>go_long and position==0:
             position=1
             buy.append([date,h])
-          if fe_f>=100 and se_f<100 and position==1:
+          if fe_f>=exit and se_f<exit and position==1:
             position=0
             sell.append([date,l])
         if len(buy)>len(sell):
