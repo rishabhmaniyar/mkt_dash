@@ -331,7 +331,6 @@ if option=='Backtest':
         report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
         
     if days=='CCI':
-        df=df.reset_index()
         position=0
         buy=[]
         sell=[]
@@ -342,7 +341,7 @@ if option=='Backtest':
         exit=st.sidebar.number_input(label='CCI Exit Level',min_value=0)        
         for i in range(1,len(df)-1,1):
           fe_f=df.iloc[i]['CCI']
-          se_f=df.iloc[i+1]['CCI'] 
+          se_f=df.iloc[i+1]['CCI']
           h=df.iloc[i+1]['High']
           l=df.iloc[i+1]['Low']
           date=df.iloc[i+1]['Datetime']
