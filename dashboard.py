@@ -200,13 +200,13 @@ if option=='Stock Info':
     st.write(d2)
     
 if option=='Backtest':
-    days=st.sidebar.selectbox("Strategy?",('HH-LL','RSI','MA Crossover'))
+    days=st.sidebar.selectbox("Strategy?",('HH-LL','RSI','MA Crossover','CCI'))
     stock=st.text_input(label='stock name',value='LT')
     #st.write(stock)
     start = st.date_input ( label='start date' , value=end-timedelta(150) , min_value=None , max_value=None , key=None )
     end = st.date_input ( label='end date' , value=None , min_value=None , max_value=None , key=None )
     tf=st.sidebar.selectbox("Time Frame",('1m','5m','15m','30m','60m','1d'))
-    b=st.sidebar.number_input(label='Buffer %',min_value=1)
+    b=st.sidebar.number_input(label='Buffer %',min_value=0)
     df=client.historical_data('N','C',client.fetch_market_feed([{"Exch":"N","ExchType":"C","Symbol":stock}])['Data'][0]['Token'],tf,start,end)
     # df=df.reset_index()
     print(type(df))
@@ -220,6 +220,7 @@ if option=='Backtest':
     def crossdown(fe_f,se_f,fe_s,se_s):
         if fe_f>fe_s and se_f<se_s:
             return (True)
+
     def report(stock,trades,total_profit,max_profit,max_loss,returns):
         st.title("Report")
         st.write(f'Stock Name ->  {stock}')
@@ -228,6 +229,7 @@ if option=='Backtest':
         st.write(f'Max. Profit ->  {max_profit}')
         st.write(f'Max. Loss ->  {max_loss}')
         st.write(f'Returns from {start} ->  {returns}%')
+        
     if days=='HH-LL':
         df=df.reset_index()
         position=0
@@ -311,6 +313,48 @@ if option=='Backtest':
         if len(buy)>len(sell):
             position=0
             sell.append([date,t_close]) 
+        buy_df=pd.DataFrame(buy) 
+        sell_df=pd.DataFrame(sell)
+        buy_df.columns=['Date','Price'] 
+        sell_df.columns=['Date','Price'] 
+        st.title("Buy Trades")
+        st.write(buy_df)
+        st.title("Sell Trades")
+        st.write(sell_df)
+        pnl=[]
+        for i in range(0,len(buy),1):
+            pnl.append(sell[i][1]-buy[i][1])
+        pnl_df=pd.DataFrame(pnl)
+        pnl_df.columns=['PNL']
+        st.write(pnl_df)
+        r=(sum(pnl)*100)/round(df['Close'][0])
+        report(stock,len(pnl)+1,round(sum(pnl)),round(max(pnl)),-round(min(pnl)),round(r,2))
+        
+    if days=='CCI':
+        df=df.reset_index()
+        position=0
+        buy=[]
+        sell=[]
+        pnl=[]
+        b=st.sidebar.number_input(label='CCI Period',min_value=5)
+        df['cci'] = ta.cci(df["Close"], length=b)
+        go_long=st.sidebar.number_input(label='CCI Buy Level',min_value=0)
+        exit=st.sidebar.number_input(label='CCI Exit Level',min_value=0)        
+        for i in range(1,len(df)-1,1):
+          fe_f=df.iloc[i]['CCI']
+          se_f=df.iloc[i+1]['CCI'] 
+          h=df.iloc[i+1]['High']
+          l=df.iloc[i+1]['Low']
+          date=df.iloc[i+1]['Datetime']
+          if fe_f<=100 and se_f>100 and position==0:
+            position=1
+            buy.append([date,h])
+          if fe_f>=100 and se_f<100 and position==1:
+            position=0
+            sell.append([date,l])
+        if len(buy)>len(sell):
+          position=0
+          sell.append([date,l])
         buy_df=pd.DataFrame(buy) 
         sell_df=pd.DataFrame(sell)
         buy_df.columns=['Date','Price'] 
